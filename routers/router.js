@@ -39,15 +39,33 @@ router.post('/accounts', (req, res) => {
     })
     .catch(error => {
         res.status(500).json({error: "There was a problem posting to database."});
+    });
+
+});
+
+router.put('/accounts/:id', (req, res) => {
+    //you have to .where() before you .update()
+    db('accounts')
+    .where({id: req.params.id})
+    .update(req.body)
+    .then(account => {
+        res.status(201).json(account);
+    })
+    .catch(error => {
+        res.status(500).json({error: "There was a problem updating account."});
     })
 });
 
-router.put('/:id', (req, res) => {
-
-});
-
-router.delete('/:id', (req, res) => {
-
+router.delete('/accounts/:id', (req, res) => {
+    db('accounts')
+    .where({id: req.params.id})
+    .del()
+    .then(count => {
+        res.status(200).json(count);
+    })
+    .catch(error => {
+        res.status(200).json({error: "There was a problem deleteing account."});
+    })
 });
 
 module.exports = router;
